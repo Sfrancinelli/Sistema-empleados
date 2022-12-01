@@ -8,7 +8,10 @@
 </head>
 <body>
     <h1>Hola flask!</h1>
+    <a href="/create">Cargar Empleado</a>
+    <br>
     <table>
+        <br>
         <thead>
             <tr>
                 <th>#</th>
@@ -24,6 +27,11 @@
                 <td>{{empleado[3]}}</td> <!-- Foto -->
                 <td>{{empleado[1]}}</td> <!-- Nombre -->
                 <td>{{empleado[2]}}</td> <!-- Correo -->
+                <td>
+                    <a href="/modify/{{empleado[0]}}">Editar</a>
+                    |
+                    <a href="/delete/{{empleado[0]}}">Borrar</a>  
+                </td>
             </tr>
             {% endfor %}
         </tbody>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create</title>
+</head>
+<body>
+    <form method="POST" action="/update" enctype="multipart/form-data">
+        <input hidden type="text" value="{{empleado[0]}}" name="txtID" id="txtID">
+        <label for="txtNombre">Nombre:</label>
+        <input type="text" name="txtNombre" id="txtNombre" value="{{empleado[1]}}">
+        <br>
+        <label for="txtCorreo">Correo:</label>
+        <input type="email" name="txtCorreo" id="txtCorreo" value="{{empleado[2]}}">
+        <br>
+        Foto: {{empleado[3]}}
+        <br>
+        <label for="txtFoto">¿Actualizar foto?:</label>
+        <input type="file" name="txtFoto" id="txtFoto" value="{{empleado[3]}}">
+        <br>
+        <input type="submit" value="Modificar empleado">
+    </form>
+    <br>
+    <br>
+    <a href="/">Inicio</a>
+</body>
+</html>
