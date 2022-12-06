@@ -1,20 +1,30 @@
 {% include 'header.html' %}
     <form method="POST" action="/update" enctype="multipart/form-data">
-        <input hidden type="text" value="{{empleado[0]}}" name="txtID" id="txtID">
-        <label for="txtNombre">Nombre:</label>
-        <input type="text" name="txtNombre" id="txtNombre" value="{{empleado[1]}}">
-        <br>
-        <label for="txtCorreo">Correo:</label>
-        <input type="email" name="txtCorreo" id="txtCorreo" value="{{empleado[2]}}">
-        <br>
-        Foto: {{empleado[3]}}
-        <br>
-        <label for="txtFoto">¿Actualizar foto?:</label>
-        <input type="file" name="txtFoto" id="txtFoto" value="{{empleado[3]}}">
-        <br>
-        <input type="submit" value="Modificar empleado">
+        <div class="card">
+            <div class="card-header">
+                Modificar empleado
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    <input hidden type="text" value="{{empleado[0]}}" name="txtID" id="txtID">
+                    <div class="form-group">
+                        <label for="txtNombre">Nombre</label>
+                        <input type="text" name="txtNombre" id="txtNombre" value="{{empleado[1]}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtCorreo">Correo:</label>
+                        <input type="email" name="txtCorreo" id="txtCorreo" value="{{empleado[2]}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtFoto">¿Actualizar foto?:</label>
+                        <img class="img-thumbnail" width="50" alt="Foto de perfil" src="{{url_for('uploads', nombreFoto=empleado[3])}}">
+                        <!-- ejecutamos la función con el url for (la funcion es la que está en la ruta de userpic) y le pasamos el parámetro necesario (nombreFoto) -->
+                        <input type="file" name="txtFoto" id="txtFoto" value="{{empleado[3]}}">
+                    </div>
+
+                </p>
+            </div>
+        </div>
+        <input class="btn btn-success" type="submit" value="Modificar empleado">
     </form>
-    <br>
-    <br>
-    <a href="/">Inicio</a>
 {% include 'footer.html' %}
