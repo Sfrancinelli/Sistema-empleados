@@ -12,7 +12,7 @@ app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = ''
 app.config['MYSQL_DATABASE_DB'] = 'empleados'
 
-UPLOADS = os.path.join('uploads')
+UPLOADS = os.path.join('uploads/')
 app.config['UPLOADS'] = UPLOADS # Guardamos la ruta como un valor en la app
 
 mysql.init_app(app)
@@ -52,7 +52,7 @@ def store():
         _foto.save( "uploads/" + nuevoNombreFoto)
 
     sql = "INSERT INTO empleados (nombre, correo, foto) values (%s, %s, %s);"
-    datos = (_nombre, _correo, _foto.filename)
+    datos = (_nombre, _correo, nuevoNombreFoto)
     conn = mysql.connect()
     cursor = conn.cursor()
     cursor.execute(sql, datos)
@@ -62,11 +62,23 @@ def store():
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    sql = "DELETE FROM empleados WHERE id = %s"
-    # sql = f"DELETE FROM empleados WHERE id = {id}" Se puede hacer con un f string trambién!
     conn = mysql.connect()
     cursor = conn.cursor()
+
+    sql = f"SELECT foto FROM empleados WHERE id = '{id}'"
+    cursor.execute(sql)
+
+    nombreFoto = cursor.fetchone()[0]
+
+    try:
+        os.remove(os.path.join(app.config['UPLOADS'], nombreFoto))
+    except:
+        pass
+
+    sql = "DELETE FROM empleados WHERE id = %s"
+    # sql = f"DELETE FROM empleados WHERE id = {id}" Se puede hacer con un f string trambién!
     cursor.execute(sql, id)
+
     conn.commit()
 
     return redirect('/')
@@ -90,7 +102,7 @@ def update():
     _foto = request.files['txtFoto']
     id = request.form['txtID']
 
-    datos = (_nombre, _correo, id)
+    # datos = (_nombre, _correo, id)
 
     conn = mysql.connect()
     cursor = conn.cursor()
@@ -101,17 +113,22 @@ def update():
         nuevoNombreFoto = f"{tiempo}_{_foto.filename}" 
         _foto.save("uploads/" + nuevoNombreFoto)
 
-    sql = f'SELECT foto FROM empleados WHERE id = {id}'
-    cursor.execute(sql)
+        sql = f'SELECT foto FROM empleados WHERE id = "{id}"'
+        cursor.execute(sql)
+        conn.commit()
 
-    nombreFoto = cursor.fetchone()[0]
+        nombreFoto = cursor.fetchone()[0]
+        borrarEstaFoto = os.path.join(app.config['UPLOADS'], nombreFoto)
 
-    os.remove(os.path.join(app.config['UPLOADS'], nombreFoto))
+        try:
+            os.remove(os.path.join(app.config['UPLOADS'], nombreFoto))
+        except:
+            pass
 
-    conn = mysql.connect()
-    cursor = conn.cursor()
+        conn = mysql.connect()
+        cursor = conn.cursor()
 
-    sql = f"UPDATE empleados SET nombre = {_nombre}, correo = {_correo} WHERE id = {id}"
+    sql = f"UPDATE empleados SET nombre = '{_nombre}', correo = '{_correo}', foto = '{nuevoNombreFoto}' WHERE id = '{id}'"
 
     cursor.execute(sql)
     conn.commit()
