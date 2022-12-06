@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, send_from_directory
 from flaskext.mysql import MySQL
 from datetime import datetime
 import os
@@ -16,6 +16,10 @@ UPLOADS = os.path.join('uploads/')
 app.config['UPLOADS'] = UPLOADS # Guardamos la ruta como un valor en la app
 
 mysql.init_app(app)
+
+@app.route('/userpic/<path:nombreFoto>')
+def uploads(nombreFoto):
+    return send_from_directory(os.path.join('uploads'), nombreFoto)
 
 # Establece la ruta del navegador (URL). En el parametro se especifica la misma. Se accede a la misma mediante el método "GET". Como es el método por defecto, no se especifica como parámetro, pero sería como poner @app.route('/URL',methods = ["GET"])
 @app.route('/', methods = ["GET"])
