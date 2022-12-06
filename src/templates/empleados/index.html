@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Empleados</title>
-</head>
-<body>
-    <h1>Hola flask!</h1>
-    <table>
-        <thead>
+{% include 'header.html' %}
+    <table class="table table-dark">
+        <thead class="thead-dark">
             <tr>
                 <th>#</th>
                 <th>Foto</th>
@@ -21,12 +12,20 @@
             {% for empleado in empleados %}
             <tr>
                 <td>{{empleado[0]}}</td> <!-- id -->
-                <td>{{empleado[3]}}</td> <!-- Foto -->
+                <td>
+                    <!-- {{empleado[3]}} Oculto el nombre de la foto, pero lo utilizo abajo para establecer la url de la nueva ruta.-->
+                    <img width="50" src="userpic/{{empleado[3]}}" alt="Foto de perfil">
+                    <!-- Acá uso la ruta "userpic" que ha sido definida en la aplicación. Lo único que hace la ruta es almacenar la foto en el servidor y ocultar, en cierta forma, el nombre de la carpeta original de uploads. -->
+                </td> <!-- Foto -->
                 <td>{{empleado[1]}}</td> <!-- Nombre -->
                 <td>{{empleado[2]}}</td> <!-- Correo -->
+                <td>
+                    <a class="btn btn-warning" href="/modify/{{empleado[0]}}">Editar</a>
+                    |
+                    <a class="btn btn-danger" href="/delete/{{empleado[0]}}">Borrar</a>  
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% include 'footer.html' %}
