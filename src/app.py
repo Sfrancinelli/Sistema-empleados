@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template, request, redirect, url_for, send_from_directory
+from flask import render_template, request, redirect, url_for, send_from_directory, flash
 from flaskext.mysql import MySQL
 from datetime import datetime
 import os
@@ -8,10 +8,12 @@ from pymysql.cursors import DictCursor
 app = Flask(__name__)
 mysql = MySQL()
 
+# Recordar que esto es a modo de ejemplo y todas estas claves irían en archivos aparte
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = ''
 app.config['MYSQL_DATABASE_DB'] = 'empleados'
+app.config['SECRET_KEY'] = 'codoacodo'
 
 UPLOADS = os.path.join('uploads/')
 app.config['UPLOADS'] = UPLOADS # Guardamos la ruta como un valor en la app
@@ -47,6 +49,10 @@ def store():
     _correo = request.form['txtCorreo']
     # _foto = request.files['txtFoto']
     _foto = request.files['txtFoto']
+
+    if _nombre == '' or _correo == '':
+        flash("El nombre y el correo son obligatorios!")
+        return redirect('/create')
 
     now = datetime.now()
     tiempo = now.strftime("%Y%H%M%S")
